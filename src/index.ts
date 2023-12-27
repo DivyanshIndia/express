@@ -25,7 +25,8 @@ server.listen(8080, () => {
 });
 
 const MONGO_URL =
-  "mongodb+srv://divyansh:WWu4ilKmVfmqz82a@cluster0.gtjtqfm.mongodb.net/?retryWrites=true&w=majority";
+"mongodb+srv://divyansh:pFSeCpOc4zYVsOPc@cluster0.kzxfpuk.mongodb.net/?retryWrites=true&w=majority"
+
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGO_URL);
