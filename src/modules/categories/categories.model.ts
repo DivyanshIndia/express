@@ -7,12 +7,15 @@ interface ICategories extends Document {
   updatedAt: Date;
 }
 
-const CategoriesSchema: Schema = new Schema({
-  name: { type: String, required: true },
-  status: { type: String, enum: ["active", "inactive"], default: "active" },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date },
-});
+const CategoriesSchema: Schema = new Schema(
+  {
+    name: { type: String, required: true },
+    status: { type: String, enum: ["active", "inactive"], default: "active" },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date },
+  },
+  { timestamps: true }
+);
 
 const Categories = mongoose.model<ICategories>("Categories", CategoriesSchema);
 
@@ -28,9 +31,8 @@ export const deleteCategoryByName = (name: string) =>
   Categories.findOneAndDelete({ name: name });
 
 export const createNewCategory = (values: ICategories) =>
-  new Categories(values)
-    .save()
-    .then((category: ICategories) => category.toObject());
+new Categories(values).save().then((categories: ICategories) => categories.toObject());
+
 
 export const updateCategoryById = (id: string, values: ICategories) =>
   Categories.findByIdAndUpdate(id, values, { new: true });

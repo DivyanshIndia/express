@@ -1,6 +1,6 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose from "mongoose";
 
-interface IStores extends Document {
+interface IStores extends mongoose.Document {
   name: string;
   address: string;
   phone: string;
@@ -17,7 +17,7 @@ interface IStores extends Document {
   updatedAt: Date;
 }
 
-const StoresSchema: Schema = new Schema({
+const StoresSchema = new mongoose.Schema({
   name: { type: String, required: true },
   address: { type: String, required: true },
   phone: { type: String },
@@ -34,4 +34,18 @@ const StoresSchema: Schema = new Schema({
   updatedAt: { type: Date },
 });
 
-export default mongoose.model<IStores>("Stores", StoresSchema);
+const Stores = mongoose.model<IStores>("Stores", StoresSchema);
+
+// CRUD Functions (as provided in the previous response)
+export const getStores = () => Stores.find();
+
+export const getStoreById = (id: string) => Stores.findById(id);
+
+export const createStore = (storeData: IStores) => new Stores(storeData).save();
+
+export const updateStoreById = (id: string, storeData: Partial<IStores>) =>
+  Stores.findByIdAndUpdate(id, storeData, { new: true });
+
+export const deleteStoreById = (id: string) => Stores.findByIdAndDelete(id);
+
+export default Stores;

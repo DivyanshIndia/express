@@ -1,6 +1,6 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose from 'mongoose';
 
-interface IPromotionRedemption extends Document {
+interface IPromotionRedemption extends mongoose.Document {
   promotionId: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
   redemptionTime: Date;
@@ -9,12 +9,8 @@ interface IPromotionRedemption extends Document {
   updatedAt: Date;
 }
 
-const PromotionRedemptionSchema: Schema = new Schema({
-  promotionId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Promotions",
-    required: true,
-  },
+const PromotionRedemptionSchema = new mongoose.Schema({
+  promotionId: { type: mongoose.Schema.Types.ObjectId, ref: "Promotions", required: true },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   redemptionTime: { type: Date, required: true },
   used: { type: Boolean, required: true, default: false },
@@ -22,7 +18,20 @@ const PromotionRedemptionSchema: Schema = new Schema({
   updatedAt: { type: Date },
 });
 
-export default mongoose.model<IPromotionRedemption>(
-  "PromotionRedemption",
-  PromotionRedemptionSchema
-);
+const PromotionRedemption = mongoose.model<IPromotionRedemption>("PromotionRedemption", PromotionRedemptionSchema);
+
+// CRUD Functions
+
+export const getAllRedemptions = () => PromotionRedemption.find();
+
+export const getRedemptionById = (id: string) => PromotionRedemption.findById(id);
+
+export const createRedemption = (redemptionData: IPromotionRedemption) => 
+  new PromotionRedemption(redemptionData).save();
+
+export const updateRedemptionById = (id: string, redemptionData: Partial<IPromotionRedemption>) => 
+  PromotionRedemption.findByIdAndUpdate(id, redemptionData, { new: true });
+
+export const deleteRedemptionById = (id: string) => PromotionRedemption.findByIdAndDelete(id);
+
+export default PromotionRedemption;

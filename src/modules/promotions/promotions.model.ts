@@ -1,6 +1,6 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose from 'mongoose';
 
-interface IPromotions extends Document {
+interface IPromotions extends mongoose.Document {
   storeId: mongoose.Types.ObjectId;
   createdBy: mongoose.Types.ObjectId;
   title: string;
@@ -14,17 +14,9 @@ interface IPromotions extends Document {
   updatedAt: Date;
 }
 
-const PromotionsSchema: Schema = new Schema({
-  storeId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Stores",
-    required: true,
-  },
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
+const PromotionsSchema = new mongoose.Schema({
+  storeId: { type: mongoose.Schema.Types.ObjectId, ref: "Stores", required: true },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   title: { type: String, required: true, maxlength: 50 },
   details: { type: String, required: true },
   promoCode: { type: String, required: true, maxlength: 10 },
@@ -36,4 +28,20 @@ const PromotionsSchema: Schema = new Schema({
   updatedAt: { type: Date },
 });
 
-export default mongoose.model<IPromotions>("Promotions", PromotionsSchema);
+const Promotions = mongoose.model<IPromotions>("Promotions", PromotionsSchema);
+
+// CRUD Functions
+
+export const getPromotions = () => Promotions.find();
+
+export const getPromotionById = (id: string) => Promotions.findById(id);
+
+export const createPromotion = (promotionData: IPromotions) => 
+  new Promotions(promotionData).save();
+
+export const updatePromotionById = (id: string, promotionData: Partial<IPromotions>) => 
+  Promotions.findByIdAndUpdate(id, promotionData, { new: true });
+
+export const deletePromotionById = (id: string) => Promotions.findByIdAndDelete(id);
+
+export default Promotions;

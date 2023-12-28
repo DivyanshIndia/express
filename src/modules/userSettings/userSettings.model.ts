@@ -1,6 +1,6 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose from 'mongoose';
 
-interface IUserSettings extends Document {
+interface IUserSettings extends mongoose.Document {
   userId: mongoose.Types.ObjectId;
   preferredCategories: string;
   radius: 100 | 200 | 300 | 400 | 500;
@@ -8,7 +8,7 @@ interface IUserSettings extends Document {
   updatedAt: Date;
 }
 
-const UserSettingsSchema: Schema = new Schema({
+const UserSettingsSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   preferredCategories: { type: String },
   radius: { type: Number, enum: [100, 200, 300, 400, 500], required: true },
@@ -16,7 +16,20 @@ const UserSettingsSchema: Schema = new Schema({
   updatedAt: { type: Date },
 });
 
-export default mongoose.model<IUserSettings>(
-  "UserSettings",
-  UserSettingsSchema
-);
+const UserSettings = mongoose.model<IUserSettings>("UserSettings", UserSettingsSchema);
+
+// CRUD Functions
+
+export const getUserSettings = () => UserSettings.find();
+
+export const getUserSettingsById = (id: string) => UserSettings.findById(id);
+
+export const createUserSettings = (userSettingsData: IUserSettings) =>
+  new UserSettings(userSettingsData).save();
+
+export const updateUserSettingsById = (id: string, userSettingsData: Partial<IUserSettings>) =>
+  UserSettings.findByIdAndUpdate(id, userSettingsData, { new: true });
+
+export const deleteUserSettingsById = (id: string) => UserSettings.findByIdAndDelete(id);
+
+export default UserSettings;

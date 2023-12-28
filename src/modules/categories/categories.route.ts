@@ -17,3 +17,4 @@ export default (router: express.Router) => {
 
   router.put("/categories/:id", updateCategory);
 };
+

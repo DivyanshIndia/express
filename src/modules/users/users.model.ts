@@ -1,3 +1,4 @@
+// models/User.js
 import mongoose, { Schema, Document } from "mongoose";
 
 interface IUser extends Document {
@@ -28,4 +29,34 @@ const UserSchema: Schema = new Schema({
   updatedAt: { type: Date },
 });
 
-export default mongoose.model<IUser>("User", UserSchema);
+const User = mongoose.model<IUser>("User", UserSchema);
+
+// CRUD Operations
+
+// Get all users
+export const getUsers = async () => {
+  return await User.find({ deleted: false });
+};
+
+// Get a user by ID
+export const getUserById = async (id: string) => {
+  return await User.findOne({ _id: id, deleted: false });
+};
+
+// Create a new user
+export const createUser = async (userData: IUser) => {
+  const user = new User(userData);
+  return await user.save();
+};
+
+// Soft delete a user by ID
+export const deleteUserById = async (id: string) => {
+  return await User.findByIdAndUpdate(id, { deleted: true }, { new: true });
+};
+
+// Update a user by ID
+export const updateUserById = async (id: string, userData: IUser) => {
+  return await User.findByIdAndUpdate(id, userData, { new: true });
+};
+
+export default User;

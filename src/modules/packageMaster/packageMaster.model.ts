@@ -1,6 +1,6 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose from 'mongoose';
 
-interface IPackageMaster extends Document {
+interface IPackageMaster extends mongoose.Document {
   name: string;
   noOfPromotions: number;
   pricePerMonth: number;
@@ -8,7 +8,7 @@ interface IPackageMaster extends Document {
   updatedAt: Date;
 }
 
-const PackageMasterSchema: Schema = new Schema({
+const PackageMasterSchema = new mongoose.Schema({
   name: { type: String, required: true },
   noOfPromotions: { type: Number, required: true },
   pricePerMonth: { type: Number, required: true },
@@ -16,7 +16,24 @@ const PackageMasterSchema: Schema = new Schema({
   updatedAt: { type: Date },
 });
 
-export default mongoose.model<IPackageMaster>(
-  "PackageMaster",
-  PackageMasterSchema
-);
+const PackageMaster = mongoose.model<IPackageMaster>("PackageMaster", PackageMasterSchema);
+
+// CRUD Functions
+
+// Get all packages
+export const getAllPackages = () => PackageMaster.find();
+
+// Get a single package by ID
+export const getPackageById = (id: string) => PackageMaster.findById(id);
+
+// Create a new package
+export const createPackage = (packageData: IPackageMaster) => new PackageMaster(packageData).save();
+
+// Update a package by ID
+export const updatePackageById = (id: string, packageData: Partial<IPackageMaster>) => 
+  PackageMaster.findByIdAndUpdate(id, packageData, { new: true });
+
+// Delete a package by ID
+export const deletePackageById = (id: string) => PackageMaster.findByIdAndDelete(id);
+
+export default PackageMaster;

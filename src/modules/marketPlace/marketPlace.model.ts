@@ -23,5 +23,23 @@ const MarketPlaceSchema: Schema = new Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date },
 });
+const marketPlace = mongoose.model<IMarketPlace>(
+  "MarketPlace",
+  MarketPlaceSchema
+);
 
-export default mongoose.model<IMarketPlace>("MarketPlace", MarketPlaceSchema);
+export const getMarketPlace = () => marketPlace.find();
+export const getMarketPlaceByName = (name: string) =>
+  marketPlace.findOne({ name });
+
+export const createMarketPlace = (values: IMarketPlace) =>
+  new marketPlace(values)
+    .save()
+    .then((marketP: IMarketPlace) => marketP.toObject());
+
+export const deleteMarketPlaceByName = (name: string) =>
+  marketPlace.findOneAndDelete({ name });
+
+export const updateMarketPlaceByName = (name: string, values: IMarketPlace) =>
+  marketPlace.findByIdAndUpdate(name, values, { new: true });
+export default marketPlace;

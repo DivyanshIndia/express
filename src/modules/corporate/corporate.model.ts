@@ -26,4 +26,31 @@ const CorporateSchema: Schema = new Schema({
   updatedAt: { type: Date },
 });
 
-export default mongoose.model<ICorporate>("Corporate", CorporateSchema);
+const corporate = mongoose.model<ICorporate>("Corporate", CorporateSchema);
+
+export const getCorporates = () => corporate.find();
+export const getCorporateById = (id: string) => corporate.findById(id);
+export const getCorporateByName = (name: string) => corporate.findOne({ name });
+export const getCorporateByEmail = (email: string) =>
+  corporate.findOne({ email });
+export const getCorporateByType = (type: string) => corporate.findOne({ type });
+
+export const createCorporate = (values: ICorporate) =>
+  new corporate(values).save().then((corp: ICorporate) => corp.toObject());
+
+export const deleteCorporateById = (id: string) =>
+  corporate.findByIdAndDelete({ _id: id });
+
+export const deleteCorporateByName = (name: string) =>
+  corporate.findOneAndDelete({ name: name });
+
+export const deleteCorporateByEmail = (email: string) =>
+  corporate.findOneAndDelete({ email: email });
+
+export const updateCorporateByEmail = (email: string, values: ICorporate) =>
+  corporate.findByIdAndUpdate(email, values, { new: true });
+
+export const updateCorporateByName = (name: string, values: ICorporate) =>
+  corporate.findByIdAndUpdate(name, values, { new: true });
+
+export default corporate;
