@@ -1,21 +1,11 @@
-import express from "express";
-import {
-  getUsers,
-  getUserByEmail,
-  getUserByPhone,
-  getUserById,
-  createUser,
-  deleteUserById,
-  deleteUserByEmail,
-  updateUserByEmail,
-} from "../db/user";
+// controllers/userController.js
 
-export const getAllUsers = async (
-  req: express.Request,
-  res: express.Response
-) => {
+import express from 'express';
+import * as userDb from './users.model';
+
+export const getAllUsers = async (req:express.Request, res: express.Response) => {
   try {
-    const users = await getUsers();
+    const users = await userDb.getUsers();
     res.status(200).json(users);
   } catch (error) {
     console.error(error);
@@ -23,10 +13,10 @@ export const getAllUsers = async (
   }
 };
 
-export const getUser = async (req: express.Request, res: express.Response) => {
+export const getUser = async (req:express.Request, res: express.Response) => {
   try {
     const { id } = req.params;
-    const user = await getUserById(id);
+    const user = await userDb.getUserById(id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -39,13 +29,10 @@ export const getUser = async (req: express.Request, res: express.Response) => {
   }
 };
 
-export const createUserController = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const createUserController = async (req:express.Request, res: express.Response) => {
   try {
     const userData = req.body;
-    const newUser = await createUser(userData);
+    const newUser = await userDb.createUser(userData);
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -54,13 +41,10 @@ export const createUserController = async (
   }
 };
 
-export const deleteUser = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const deleteUser = async (req:express.Request, res: express.Response) => {
   try {
     const { id } = req.params;
-    await deleteUserById(id);
+    await userDb.deleteUserById(id);
 
     res.sendStatus(204);
   } catch (error) {
@@ -69,15 +53,12 @@ export const deleteUser = async (
   }
 };
 
-export const updateUser = async (
-  req: express.Request,
-  res: express.Response
-) => {
+export const updateUser = async (req:express.Request, res: express.Response) => {
   try {
     const { id } = req.params;
     const userData = req.body;
 
-    const updatedUser = await updateUserByEmail(id, userData);
+    const updatedUser = await userDb.updateUserById(id, userData);
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
