@@ -1,10 +1,10 @@
 import express from "express";
 import {
-  getMarketPlace,
-  getMarketPlaceByName,
+  getMarketPlaces,
+  getMarketPlaceById,
   createMarketPlace,
-  deleteMarketPlaceByName,
-  updateMarketPlaceByName,
+  deleteMarketPlaceById,
+  updateMarketPlaceByID,
 } from "./marketPlace.model";
 
 export const getAllMarketPlaces = async (
@@ -12,7 +12,7 @@ export const getAllMarketPlaces = async (
   res: express.Response
 ) => {
   try {
-    const marketPlaces = await getMarketPlace();
+    const marketPlaces = await getMarketPlaces();
     res.status(200).json(marketPlaces);
   } catch (error) {
     console.error(error);
@@ -20,17 +20,18 @@ export const getAllMarketPlaces = async (
   }
 };
 
-export const getMarketPlaces = async (
+export const getMarketPlace = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
-    const { name } = req.params;
-    const marketPlace = await getMarketPlaceByName(name);
+    const { id } = req.params;
+    const marketPlace = await getMarketPlaceById(id);
 
     if (!marketPlace) {
       return res.status(404).json({ message: "Market Place not found" });
     }
+
     res.status(200).json(marketPlace);
   } catch (error) {
     console.error(error);
@@ -58,8 +59,8 @@ export const deleteMarketPlace = async (
   res: express.Response
 ) => {
   try {
-    const { name } = req.params;
-    await deleteMarketPlaceByName(name);
+    const { id } = req.params;
+    await deleteMarketPlaceById(id);
 
     res.sendStatus(204);
   } catch (error) {
@@ -72,7 +73,19 @@ export const updateMarketPlace = async (
   req: express.Request,
   res: express.Response
 ) => {
-  const { name } = req.params;
-  const marketPlace = req.body;
-  const updatedMarketPlace = await updateMarketPlaceByName(name, marketPlace);
+  try {
+    const { id } = req.params;
+    const marketPlaceData = req.body;
+
+    const updatedMarketPlace = await updateMarketPlaceByID(id, marketPlaceData);
+
+    if (!updatedMarketPlace) {
+      return res.status(404).json({ message: "Market Place not found" });
+    }
+
+    res.status(200).json(updatedMarketPlace);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
 };

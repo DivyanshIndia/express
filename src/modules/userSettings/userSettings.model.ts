@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 interface IUserSettings extends mongoose.Document {
   userId: mongoose.Types.ObjectId;
@@ -16,7 +16,10 @@ const UserSettingsSchema = new mongoose.Schema({
   updatedAt: { type: Date },
 });
 
-const UserSettings = mongoose.model<IUserSettings>("UserSettings", UserSettingsSchema);
+const UserSettings = mongoose.model<IUserSettings>(
+  "UserSettings",
+  UserSettingsSchema
+);
 
 // CRUD Functions
 
@@ -27,9 +30,12 @@ export const getUserSettingsById = (id: string) => UserSettings.findById(id);
 export const createUserSettings = (userSettingsData: IUserSettings) =>
   new UserSettings(userSettingsData).save();
 
-export const updateUserSettingsById = (id: string, userSettingsData: Partial<IUserSettings>) =>
-  UserSettings.findByIdAndUpdate(id, userSettingsData, { new: true });
+export const updateUserSettingsById = (
+  id: string,
+  userSettingsData: Partial<IUserSettings>
+) => UserSettings.findByIdAndUpdate(id, userSettingsData, { new: true });
 
-export const deleteUserSettingsById = (id: string) => UserSettings.findByIdAndDelete(id);
+export const deleteUserSettingsById = (id: string) =>
+  UserSettings.findByIdAndDelete(id);
 
 export default UserSettings;

@@ -1,9 +1,12 @@
 // controllers/userController.js
 
-import express from 'express';
-import * as userDb from './users.model';
+import express from "express";
+import * as userDb from "./users.model";
 
-export const getAllUsers = async (req:express.Request, res: express.Response) => {
+export const getAllUsers = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const users = await userDb.getUsers();
     res.status(200).json(users);
@@ -13,7 +16,7 @@ export const getAllUsers = async (req:express.Request, res: express.Response) =>
   }
 };
 
-export const getUser = async (req:express.Request, res: express.Response) => {
+export const getUser = async (req: express.Request, res: express.Response) => {
   try {
     const { id } = req.params;
     const user = await userDb.getUserById(id);
@@ -29,7 +32,10 @@ export const getUser = async (req:express.Request, res: express.Response) => {
   }
 };
 
-export const createUserController = async (req:express.Request, res: express.Response) => {
+export const createUserController = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const userData = req.body;
     const newUser = await userDb.createUser(userData);
@@ -41,7 +47,10 @@ export const createUserController = async (req:express.Request, res: express.Res
   }
 };
 
-export const deleteUser = async (req:express.Request, res: express.Response) => {
+export const deleteUser = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { id } = req.params;
     await userDb.deleteUserById(id);
@@ -53,7 +62,10 @@ export const deleteUser = async (req:express.Request, res: express.Response) => 
   }
 };
 
-export const updateUser = async (req:express.Request, res: express.Response) => {
+export const updateUser = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { id } = req.params;
     const userData = req.body;

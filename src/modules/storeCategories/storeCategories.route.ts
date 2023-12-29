@@ -5,7 +5,7 @@ import {
   createStoreCategoryController,
   updateStoreCategoryController,
   deleteStoreCategoryController,
-} from './storeCategories.controller'
+} from "./storeCategories.controller";
 export default (router: express.Router) => {
   // Route to get all store categories
   router.get("/storeCategories", getStoreCategoriesController);

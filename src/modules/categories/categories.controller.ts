@@ -2,9 +2,7 @@ import express from "express";
 import {
   getCategories,
   getCategoryById,
-  getCategoryByName,
   createNewCategory,
-  deleteCategoryByName,
   deleteCategoryById,
   updateCategoryById,
 } from "./categories.model";

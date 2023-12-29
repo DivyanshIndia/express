@@ -2,14 +2,9 @@ import express from "express";
 import {
   getCorporates,
   getCorporateById,
-  getCorporateByName,
-  getCorporateByEmail,
   createCorporate,
   deleteCorporateById,
-  deleteCorporateByName,
-  deleteCorporateByEmail,
-  updateCorporateByEmail,
-  updateCorporateByName,
+  updateCorporateById,
 } from "./corporate.model";
 
 export const getAllCorporates = async (
@@ -30,13 +25,12 @@ export const getCorporate = async (
   res: express.Response
 ) => {
   try {
-    const { name } = req.params;
-    const corporate = await getCorporateByName(name);
+    const { id } = req.params;
+    const corporate = await getCorporateById(id);
 
     if (!corporate) {
       return res.status(404).json({ message: "Corporate not found" });
     }
-
     res.status(200).json(corporate);
   } catch (error) {
     console.error(error);
@@ -64,8 +58,8 @@ export const deleteCorporate = async (
   res: express.Response
 ) => {
   try {
-    const { name } = req.params;
-    await deleteCorporateByName(name);
+    const { id } = req.params;
+    await deleteCorporateById(id);
 
     res.sendStatus(204);
   } catch (error) {
@@ -79,10 +73,10 @@ export const updateCorporate = async (
   res: express.Response
 ) => {
   try {
-    const { name } = req.params;
+    const { id } = req.params;
     const corporateData = req.body;
 
-    const updatedCorporate = await updateCorporateByEmail(name, corporateData);
+    const updatedCorporate = await updateCorporateById(id, corporateData);
 
     if (!updatedCorporate) {
       return res.status(404).json({ message: "Corporate not found" });

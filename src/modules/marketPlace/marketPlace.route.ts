@@ -1,7 +1,7 @@
 import express from "express";
 import {
   getAllMarketPlaces,
-  getMarketPlaces,
+  getMarketPlace,
   createMarketPlaceController,
   deleteMarketPlace,
   updateMarketPlace,
@@ -9,10 +9,10 @@ import {
 
 export default (router: express.Router) => {
   router.get("/market-place", getAllMarketPlaces);
-  router.get("market-place/:name", getMarketPlaces);
+  router.get("/market-place/:id", getMarketPlace);
 
-  router.post("/add-market-place", createMarketPlaceController);
+  router.post("/market-place", createMarketPlaceController);
 
-  router.delete("/market-place/:name", deleteMarketPlace);
-  router.put("/market-place/:name", updateMarketPlace);
+  router.delete("/market-place/:id", deleteMarketPlace);
+  router.put("/market-place/:id", updateMarketPlace);
 };

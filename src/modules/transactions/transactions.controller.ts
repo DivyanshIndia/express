@@ -1,8 +1,10 @@
+import express from "express";
+import * as transactionDb from "./transactions.model";
 
-import express from 'express';
-import * as transactionDb from './transactions.model';
-
-export const getAllTransactions = async (req: express.Request, res: express.Response) => {
+export const getAllTransactions = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const transactions = await transactionDb.getTransactions();
     res.status(200).json(transactions);
@@ -12,7 +14,10 @@ export const getAllTransactions = async (req: express.Request, res: express.Resp
   }
 };
 
-export const getTransaction = async (req: express.Request, res: express.Response) => {
+export const getTransaction = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { id } = req.params;
     const transaction = await transactionDb.getTransactionById(id);
@@ -28,10 +33,15 @@ export const getTransaction = async (req: express.Request, res: express.Response
   }
 };
 
-export const createTransactionController = async (req: express.Request, res: express.Response) => {
+export const createTransactionController = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const transactionData = req.body;
-    const newTransaction = await transactionDb.createTransaction(transactionData);
+    const newTransaction = await transactionDb.createTransaction(
+      transactionData
+    );
 
     res.status(201).json(newTransaction);
   } catch (error) {
@@ -40,7 +50,10 @@ export const createTransactionController = async (req: express.Request, res: exp
   }
 };
 
-export const deleteTransaction = async (req: express.Request, res: express.Response) => {
+export const deleteTransaction = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { id } = req.params;
     await transactionDb.deleteTransactionById(id);
@@ -52,12 +65,18 @@ export const deleteTransaction = async (req: express.Request, res: express.Respo
   }
 };
 
-export const updateTransaction = async (req: express.Request, res: express.Response) => {
+export const updateTransaction = async (
+  req: express.Request,
+  res: express.Response
+) => {
   try {
     const { id } = req.params;
     const transactionData = req.body;
 
-    const updatedTransaction = await transactionDb.updateTransactionById(id, transactionData);
+    const updatedTransaction = await transactionDb.updateTransactionById(
+      id,
+      transactionData
+    );
 
     if (!updatedTransaction) {
       return res.status(404).json({ message: "Transaction not found" });
