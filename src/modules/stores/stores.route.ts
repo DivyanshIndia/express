@@ -5,6 +5,7 @@ import {
   createStoreController,
   updateStoreController,
   deleteStoreController,
+  getNearbyStores,
 } from "./stores.controller";
 
 export default (router: express.Router) => {
@@ -13,6 +14,8 @@ export default (router: express.Router) => {
 
   // Route to get a single store by ID
   router.get("/stores/:id", getStore);
+
+  router.get("/nearby-stores", getNearbyStores);
 
   // Route to create a new store
   router.post("/stores", createStoreController);

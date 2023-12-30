@@ -1,5 +1,5 @@
 import express from "express";
-import {
+import Stores, {
   getStores,
   getStoreById,
   createStore,
@@ -8,6 +8,47 @@ import {
 } from "./stores.model";
 
 // Controller Functions
+
+// Function to find nearby stores
+export const getNearbyStores = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { lat, long, radius } = req.query;
+
+    if (!lat || !long || !radius) {
+      return res
+        .status(400)
+        .send("Latitude, longitude, and radius are required");
+    }
+
+    const parsedLat = parseFloat(lat as string);
+    const parsedLong = parseFloat(long as string);
+    const parsedRadius = parseFloat(radius as string);
+
+    if (isNaN(parsedLat) || isNaN(parsedLong) || isNaN(parsedRadius)) {
+      return res.status(400).send("Invalid latitude, longitude, or radius");
+    }
+
+    const nearbyStores = await Stores.find({
+      location: {
+        $nearSphere: {
+          $geometry: {
+            type: "Point",
+            coordinates: [parsedLong, parsedLat],
+          },
+          $maxDistance: parsedRadius,
+        },
+      },
+    });
+
+    res.json(nearbyStores);
+  } catch (error) {
+    console.error("Error fetching nearby stores:", error);
+    res.status(500).send("Server error");
+  }
+};
 
 export const getAllStores = async (
   req: express.Request,
