@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 interface IPromotionRedemption extends mongoose.Document {
   promotionId: mongoose.Types.ObjectId;
@@ -10,7 +10,11 @@ interface IPromotionRedemption extends mongoose.Document {
 }
 
 const PromotionRedemptionSchema = new mongoose.Schema({
-  promotionId: { type: mongoose.Schema.Types.ObjectId, ref: "Promotions", required: true },
+  promotionId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Promotions",
+    required: true,
+  },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   redemptionTime: { type: Date, required: true },
   used: { type: Boolean, required: true, default: false },
@@ -18,20 +22,27 @@ const PromotionRedemptionSchema = new mongoose.Schema({
   updatedAt: { type: Date },
 });
 
-const PromotionRedemption = mongoose.model<IPromotionRedemption>("PromotionRedemption", PromotionRedemptionSchema);
+const PromotionRedemption = mongoose.model<IPromotionRedemption>(
+  "PromotionRedemption",
+  PromotionRedemptionSchema
+);
 
 // CRUD Functions
 
 export const getAllRedemptions = () => PromotionRedemption.find();
 
-export const getRedemptionById = (id: string) => PromotionRedemption.findById(id);
+export const getRedemptionById = (id: string) =>
+  PromotionRedemption.findById(id);
 
-export const createRedemption = (redemptionData: IPromotionRedemption) => 
+export const createRedemption = (redemptionData: IPromotionRedemption) =>
   new PromotionRedemption(redemptionData).save();
 
-export const updateRedemptionById = (id: string, redemptionData: Partial<IPromotionRedemption>) => 
-  PromotionRedemption.findByIdAndUpdate(id, redemptionData, { new: true });
+export const updateRedemptionById = (
+  id: string,
+  redemptionData: Partial<IPromotionRedemption>
+) => PromotionRedemption.findByIdAndUpdate(id, redemptionData, { new: true });
 
-export const deleteRedemptionById = (id: string) => PromotionRedemption.findByIdAndDelete(id);
+export const deleteRedemptionById = (id: string) =>
+  PromotionRedemption.findByIdAndDelete(id);
 
 export default PromotionRedemption;

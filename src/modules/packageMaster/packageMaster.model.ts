@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 interface IPackageMaster extends mongoose.Document {
   name: string;
@@ -16,7 +16,10 @@ const PackageMasterSchema = new mongoose.Schema({
   updatedAt: { type: Date },
 });
 
-const PackageMaster = mongoose.model<IPackageMaster>("PackageMaster", PackageMasterSchema);
+const PackageMaster = mongoose.model<IPackageMaster>(
+  "PackageMaster",
+  PackageMasterSchema
+);
 
 // CRUD Functions
 
@@ -27,13 +30,17 @@ export const getAllPackages = () => PackageMaster.find();
 export const getPackageById = (id: string) => PackageMaster.findById(id);
 
 // Create a new package
-export const createPackage = (packageData: IPackageMaster) => new PackageMaster(packageData).save();
+export const createPackage = (packageData: IPackageMaster) =>
+  new PackageMaster(packageData)
+    .save()
+    .then((packagedata: IPackageMaster) => packagedata.toObject());
 
 // Update a package by ID
-export const updatePackageById = (id: string, packageData: Partial<IPackageMaster>) => 
-  PackageMaster.findByIdAndUpdate(id, packageData, { new: true });
+export const updatePackageById = (id: string, values: IPackageMaster) =>
+  PackageMaster.findByIdAndUpdate(id, values, { new: true });
 
 // Delete a package by ID
-export const deletePackageById = (id: string) => PackageMaster.findByIdAndDelete(id);
+export const deletePackageById = (id: string) =>
+  PackageMaster.findByIdAndDelete(id);
 
 export default PackageMaster;

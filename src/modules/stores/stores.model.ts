@@ -15,6 +15,7 @@ interface IStores extends mongoose.Document {
   corporateId: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
+  location: { type: String; coordinates: Number[] };
 }
 
 const StoresSchema = new mongoose.Schema({
@@ -32,11 +33,24 @@ const StoresSchema = new mongoose.Schema({
   corporateId: { type: mongoose.Schema.Types.ObjectId, ref: "Corporate" },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date },
+  location: {
+    type: { type: String, enum: ["Point"], default: "Point" },
+    coordinates: { type: [Number], index: "2dsphere" },
+  },
+});
+
+StoresSchema.index({ location: "2dsphere" });
+
+// Middleware to automatically set the location field
+StoresSchema.pre<IStores>("save", function (next) {
+  if (this.lat != null && this.long != null) {
+    this.location = { type: "Point", coordinates: [this.long, this.lat] };
+  }
+  next();
 });
 
 const Stores = mongoose.model<IStores>("Stores", StoresSchema);
 
-// CRUD Functions (as provided in the previous response)
 export const getStores = () => Stores.find();
 
 export const getStoreById = (id: string) => Stores.findById(id);

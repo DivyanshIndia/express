@@ -46,7 +46,8 @@ export const createPackageController = async (
   res: express.Response
 ) => {
   try {
-    const newPackage = await createPackage(req.body);
+    const packageData = req.body;
+    const newPackage = await createPackage(packageData);
     res.status(201).json(newPackage);
   } catch (error) {
     console.error(error);
@@ -78,7 +79,7 @@ export const deletePackageController = async (
 ) => {
   try {
     await deletePackageById(req.params.id);
-    res.status(204).send();
+    res.status(204).send("Deleted Successfully");
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");

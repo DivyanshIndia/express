@@ -11,10 +11,9 @@ export default (router: express.Router) => {
   router.get("/categories", getAllCategories);
   router.get("/categories/:id", getCategory);
 
-  router.post("/addCategory", createCategory);
+  router.post("/categories", createCategory);
 
   router.delete("/categories/:id", deleteCategory);
 
   router.put("/categories/:id", updateCategory);
 };
-

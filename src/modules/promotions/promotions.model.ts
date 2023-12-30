@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 interface IPromotions extends mongoose.Document {
   storeId: mongoose.Types.ObjectId;
@@ -15,8 +15,16 @@ interface IPromotions extends mongoose.Document {
 }
 
 const PromotionsSchema = new mongoose.Schema({
-  storeId: { type: mongoose.Schema.Types.ObjectId, ref: "Stores", required: true },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  storeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Stores",
+    required: true,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   title: { type: String, required: true, maxlength: 50 },
   details: { type: String, required: true },
   promoCode: { type: String, required: true, maxlength: 10 },
@@ -36,12 +44,17 @@ export const getPromotions = () => Promotions.find();
 
 export const getPromotionById = (id: string) => Promotions.findById(id);
 
-export const createPromotion = (promotionData: IPromotions) => 
-  new Promotions(promotionData).save();
+export const createPromotion = (promotionData: IPromotions) =>
+  new Promotions(promotionData)
+    .save()
+    .then((promotionData: IPromotions) => promotionData.toObject());
 
-export const updatePromotionById = (id: string, promotionData: Partial<IPromotions>) => 
-  Promotions.findByIdAndUpdate(id, promotionData, { new: true });
+export const updatePromotionById = (
+  id: string,
+  promotionData: Partial<IPromotions>
+) => Promotions.findByIdAndUpdate(id, promotionData, { new: true });
 
-export const deletePromotionById = (id: string) => Promotions.findByIdAndDelete(id);
+export const deletePromotionById = (id: string) =>
+  Promotions.findByIdAndDelete(id);
 
 export default Promotions;

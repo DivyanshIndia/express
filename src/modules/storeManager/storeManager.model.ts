@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 interface IStoreManager extends mongoose.Document {
   storeId: mongoose.Types.ObjectId;
@@ -7,12 +7,19 @@ interface IStoreManager extends mongoose.Document {
 }
 
 const StoreManagerSchema = new mongoose.Schema({
-  storeId: { type: mongoose.Schema.Types.ObjectId, ref: "Stores", required: true },
+  storeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Stores",
+    required: true,
+  },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
-const StoreManager = mongoose.model<IStoreManager>("StoreManager", StoreManagerSchema);
+const StoreManager = mongoose.model<IStoreManager>(
+  "StoreManager",
+  StoreManagerSchema
+);
 
 // CRUD Functions
 
@@ -23,9 +30,12 @@ export const getStoreManagerById = (id: string) => StoreManager.findById(id);
 export const createStoreManager = (storeManagerData: IStoreManager) =>
   new StoreManager(storeManagerData).save();
 
-export const updateStoreManagerById = (id: string, storeManagerData: Partial<IStoreManager>) =>
-  StoreManager.findByIdAndUpdate(id, storeManagerData, { new: true });
+export const updateStoreManagerById = (
+  id: string,
+  storeManagerData: Partial<IStoreManager>
+) => StoreManager.findByIdAndUpdate(id, storeManagerData, { new: true });
 
-export const deleteStoreManagerById = (id: string) => StoreManager.findByIdAndDelete(id);
+export const deleteStoreManagerById = (id: string) =>
+  StoreManager.findByIdAndDelete(id);
 
 export default StoreManager;

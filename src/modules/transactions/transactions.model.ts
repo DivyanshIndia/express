@@ -53,7 +53,10 @@ export const deleteTransactionById = async (id: string) => {
 };
 
 // Update a transaction by ID
-export const updateTransactionById = async (id: string, transactionData: ITransactions) => {
+export const updateTransactionById = async (
+  id: string,
+  transactionData: ITransactions
+) => {
   return await Transactions.findByIdAndUpdate(id, transactionData, {
     new: true,
   });

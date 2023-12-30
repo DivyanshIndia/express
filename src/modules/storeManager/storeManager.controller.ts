@@ -5,7 +5,7 @@ import {
   createStoreManager,
   updateStoreManagerById,
   deleteStoreManagerById,
-} from "./storeManager.model"
+} from "./storeManager.model";
 
 // Controller Functions
 

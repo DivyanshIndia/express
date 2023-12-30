@@ -28,18 +28,20 @@ const marketPlace = mongoose.model<IMarketPlace>(
   MarketPlaceSchema
 );
 
-export const getMarketPlace = () => marketPlace.find();
-export const getMarketPlaceByName = (name: string) =>
-  marketPlace.findOne({ name });
+export default marketPlace;
+
+export const getMarketPlaces = () => marketPlace.find();
+
+export const getMarketPlaceById = (id: string) =>
+  marketPlace.findOne({ _id: id });
 
 export const createMarketPlace = (values: IMarketPlace) =>
   new marketPlace(values)
     .save()
     .then((marketP: IMarketPlace) => marketP.toObject());
 
-export const deleteMarketPlaceByName = (name: string) =>
-  marketPlace.findOneAndDelete({ name });
+export const deleteMarketPlaceById = (id: string) =>
+  marketPlace.findByIdAndDelete({ _id: id });
 
-export const updateMarketPlaceByName = (name: string, values: IMarketPlace) =>
-  marketPlace.findByIdAndUpdate(name, values, { new: true });
-export default marketPlace;
+export const updateMarketPlaceByID = (id: string, values: IMarketPlace) =>
+  marketPlace.findByIdAndUpdate(id, values, { new: true });
